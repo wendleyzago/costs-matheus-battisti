@@ -7,12 +7,14 @@ import Message from "../layout/Message"
 import Container from "../layout/Container"
 import LinkButton from "../layout/LinkButton"
 import ProjectCard from "./ProjectCard"
+import Loader from "../layout/Loader"
 
 
 
 const Projects = () => {
 
   const [projects, setProjects] = useState([])
+  const [removeLoader, setRemoveLoader] = useState(false)
 
   const location = useLocation()
 
@@ -22,20 +24,24 @@ const Projects = () => {
     message = location.state.message
   }
 
-  useEffect(() => {
-    fetch("http://localhost:5000/projects", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      setProjects(data)
-    })
-    .catch((err) => console.log(err))
-  }, [])
+
+    useEffect(() => {
+      setTimeout(() => {
+        fetch("http://localhost:5000/projects", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        setProjects(data)
+        setRemoveLoader(true)
+      })
+      .catch((err) => console.log(err))
+      }, 1000);
+    }, [])  
 
 
   return (
@@ -53,7 +59,11 @@ const Projects = () => {
             budget={project.budget}
             category={project.category.name}
             key={project.id}
-          />)
+          />
+        ))}
+        {!removeLoader && <Loader />}
+        {removeLoader && projects.length === 0 && (
+          <p>Não há projetos cadastrados</p>
         )}
       </Container>
     </div>

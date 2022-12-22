@@ -22,7 +22,6 @@ const ProjectCard = ({id, name, budget, category, handleRemove}) => {
                 <BsFillTrashFill /> Excluir
             </button>
         </div>
-    
     </div>
   )
 }
