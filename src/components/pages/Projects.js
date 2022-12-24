@@ -16,15 +16,10 @@ const Projects = () => {
   const [projects, setProjects] = useState([])
   const [removeLoader, setRemoveLoader] = useState(false)
   const [projectMessage, setProjectMessage] = useState()
+  const [message, setMessage] = useState()
+
  
   const location = useLocation()
-
-  let message = ""
-
-    if(location.state) {
-      message = location.state.message
-    }
-
 
     useEffect(() => {
       setTimeout(() => {
@@ -38,9 +33,15 @@ const Projects = () => {
       .then((data) => {
         setProjects(data)
         setRemoveLoader(true)
+
+        if(location.state){
+          setMessage(location.state.message)
+        }
+
       })
       .catch((err) => console.log(err))
       }, 1000);
+      
     }, [])  
 
     const removeProject = (id) => {
